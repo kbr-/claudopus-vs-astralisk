@@ -1,6 +1,6 @@
 # Claudopus vs Astralisk
 
-A small, mobile-friendly, turn-based pocket-monster battle. Choose a side, use four moves, and fight the CPU until one creature faints. Sound is optional and starts muted. No server, account, build, runtime dependencies, CDN, or API keys.
+A small, mobile-friendly, turn-based code-review battle between two AI-inspired pocket monsters. Choose a side, use four moves, and fight the CPU until one creature faints. Sound is optional and starts muted. No server, account, build, runtime dependencies, CDN, or API keys.
 
 ## Play
 
@@ -18,8 +18,8 @@ Do not upload the ZIP as a single file: extract it and upload its contents. Noth
 
 Each side has 180 HP. You move first; the rival then responds. An attack's power has a small random variation. Guards reduce the next damaging hit and then expire. Confidence increases damage by 18% per stage, up to three stages. Request Changes removes one confidence stage. Healing is capped at maximum HP. Every move has limited PP; Struggle becomes available if all PP is spent. Recoil can produce a double knockout.
 
-- **Claudopus:** One Small Caveat (21 power + 25% guard), Request Changes (34 power + confidence reduction), Independent Review (65% guard), Fresh Context (+44 HP).
-- **Astralisk:** Standard Argument (27 power), This Closes the Gap! (+1 confidence, 50% chance of 30-power attack), One More Lemma (35 power, 6 recoil), Context Window (+44 HP).
+- **Claudopus:** One Small Caveat (21 power + 25% guard), Request Changes (34 power + confidence reduction), Regression Suite (65% guard), Fresh Context (+44 HP).
+- **Astralisk:** Works on My Machine (27 power), This Fixes It! (+1 confidence, 50% chance of 30-power attack), One More Patch (35 power, 6 recoil), Restart the IDE (+44 HP).
 
 The CPU heals at low HP, otherwise mixes attacks, guarding, and confidence boosts. It never uses exhausted moves. Choose side during a battle to abandon it; no delayed enemy turn carries into the next fight.
 
