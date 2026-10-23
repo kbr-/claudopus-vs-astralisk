@@ -1,0 +1,6 @@
+const assert=require('node:assert/strict');const B=require('../engine.js'),P=require('../planner.js');const {random}=require('../tools/balance.cjs');
+let s=B.create('claudopus');s.enemy.hp=1;const saved=JSON.stringify(s);let i=P.choose(s,'player',random(3),192);assert.equal(JSON.stringify(s),saved,'Search must not mutate the real fight');B.act(s,'player',i,()=>.5);assert.equal(s.winner,'player','Take an immediate winning attack');
+s=B.create('claudopus');assert(!P.legal(s,'player').includes(3),'Do not waste a turn healing full HP');s.player.guard=.65;assert(!P.legal(s,'player').includes(2),'Do not refresh an unchanged shield');s.player.pp.fill(0);assert.equal(P.choose(s,'player',random(4),192),-1);
+for(const side of ['claudopus','astralisk'])for(const who of ['player','enemy']){s=B.create(side);const first=P.choose(s,who,random(12),96);assert(P.legal(s,who).includes(first));assert.equal(first,P.choose(s,who,random(12),96),'Seeded decisions must reproduce');}
+s.over=true;assert.throws(()=>P.choose(s,'player'),/over/);
+console.log('Planner passed: immediate KO, immutable real state, legal actions, healing/shield pruning, empty PP, deterministic seeds, terminal lockout.');

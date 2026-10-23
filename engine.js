@@ -8,9 +8,9 @@ claudopus:{name:'Claudopus',maxHp:180,moves:[
 {id:'audit',name:'Regression Suite',kind:'guard',pp:4,type:'PSYCHIC',desc:'Blocks 65% of the next attack',guard:.65,line:'Seven arms run the tests. The eighth finds a race condition.'},
 {id:'context',name:'Fresh Context',kind:'heal',heal:44,pp:3,type:'RECOVERY',desc:'Recover 44 HP · limited to 3 uses',line:'Claudopus opens a fresh chat. The context fits in memory again.'}]},
 astralisk:{name:'Astralisk',maxHp:180,moves:[
-{id:'machine',name:'Works on My Machine',kind:'attack',power:27,pp:12,type:'PSYCHIC',desc:'27 power · production was not consulted',line:'The container was not included in the definition of “my machine”.'},
+{id:'machine',name:'Works on My Machine',kind:'attack',power:32,pp:12,type:'PSYCHIC',desc:'32 power · production was not consulted',line:'The container was not included in the definition of “my machine”.'},
 {id:'fix',name:'This Fixes It!',kind:'boost',power:30,pp:5,type:'DRAGON',desc:'Raise confidence · 50% chance of 30 power',line:'The bug is still there.'},
-{id:'patch',name:'One More Patch',kind:'attack',power:35,pp:7,type:'DRAGON',desc:'35 power · costs 6 of your own HP',recoil:6,line:'Fixed one bug. Introduced two.'},
+{id:'patch',name:'One More Patch',kind:'attack',power:39,pp:7,type:'DRAGON',desc:'39 power · costs 7 of your own HP',recoil:7,line:'Fixed one bug. Introduced two.'},
 {id:'window',name:'Restart the IDE',kind:'heal',heal:44,pp:3,type:'RECOVERY',desc:'Recover 44 HP · limited to 3 uses',line:'A fresh process. The same magnificent optimism.'}]}}
 const struggle={id:'struggle',name:'Struggle',kind:'attack',power:24,type:'NORMAL',recoil:5,desc:'No PP left · 24 power · 5 recoil'};
 function fighter(id){return {id,hp:dex[id].maxHp,maxHp:dex[id].maxHp,confidence:0,guard:0,pp:dex[id].moves.map(m=>m.pp)};}

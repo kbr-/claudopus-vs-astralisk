@@ -1,0 +1,74 @@
+{
+  "tuning": null,
+  "results": [
+    {
+      "policy": "cpu",
+      "games": 10000,
+      "claudopusWins": 4712,
+      "astraliskWins": 5012,
+      "draws": 276,
+      "claudopusScore": 0.485,
+      "approx95": [
+        0.4752044109926967,
+        0.49479558900730325
+      ],
+      "firstMove": {
+        "claudopusFirst": {
+          "wins": 2818,
+          "n": 5000
+        },
+        "astraliskFirst": {
+          "wins": 2980,
+          "n": 5000
+        }
+      },
+      "meanPlies": 28.0509
+    },
+    {
+      "policy": "tactical",
+      "games": 10000,
+      "claudopusWins": 5906,
+      "astraliskWins": 4094,
+      "draws": 0,
+      "claudopusScore": 0.5906,
+      "approx95": [
+        0.5809622265837798,
+        0.6002377734162202
+      ],
+      "firstMove": {
+        "claudopusFirst": {
+          "wins": 4973,
+          "n": 5000
+        },
+        "astraliskFirst": {
+          "wins": 4067,
+          "n": 5000
+        }
+      },
+      "meanPlies": 22.5896
+    },
+    {
+      "policy": "random",
+      "games": 10000,
+      "claudopusWins": 3784,
+      "astraliskWins": 5997,
+      "draws": 219,
+      "claudopusScore": 0.38935,
+      "approx95": [
+        0.37979298337280926,
+        0.3989070166271907
+      ],
+      "firstMove": {
+        "claudopusFirst": {
+          "wins": 2243,
+          "n": 5000
+        },
+        "astraliskFirst": {
+          "wins": 3359,
+          "n": 5000
+        }
+      },
+      "meanPlies": 26.7834
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "policy": "mcts",
+  "games": 1200,
+  "budget": 384,
+  "tuning": {
+    "caveat": 21,
+    "review": 34,
+    "machine": 31,
+    "patch": 39,
+    "recoil": 6,
+    "boost": 30
+  },
+  "seed": 200001,
+  "claudopusWins": 581,
+  "astraliskWins": 611,
+  "draws": 8,
+  "firstMove": {
+    "claudopusFirst": {
+      "wins": 545,
+      "n": 600
+    },
+    "astraliskFirst": {
+      "wins": 564,
+      "n": 600
+    }
+  },
+  "meanPlies": 25.619999999999997,
+  "claudopusScore": 0.4875,
+  "approx95": [
+    0.45921867886749274,
+    0.5157813211325072
+  ],
+  "seconds": 24.986
+}

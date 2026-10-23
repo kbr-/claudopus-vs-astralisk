@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict');const B=require('../engine.js');
-let s=B.create('claudopus');B.act(s,'player',2,()=>.5);assert.equal(s.player.guard,.65);let r=B.act(s,'enemy',0,()=>.5);assert.equal(r.damage,9);assert.equal(s.player.guard,0);
+let s=B.create('claudopus');B.act(s,'player',2,()=>.5);assert.equal(s.player.guard,.65);let r=B.act(s,'enemy',0,()=>.5);assert.equal(r.damage,11);assert.equal(s.player.guard,0);
 s=B.create('astralisk');r=B.act(s,'player',1,()=>.9);assert.equal(r.damage,0);assert.equal(s.player.confidence,1);assert.equal(s.enemy.hp,180);B.act(s,'enemy',1,()=>.5);assert.equal(s.player.confidence,0);
 s=B.create('claudopus');s.player.hp=170;B.act(s,'player',3);assert.equal(s.player.hp,180);s.player.pp[0]=0;assert.throws(()=>B.act(s,'player',0),/Unavailable/);assert.throws(()=>B.act(s,'player',-1),/empty PP/);
 s=B.create('astralisk');s.player.hp=1;s.enemy.hp=1;B.act(s,'player',2,()=>.5);assert.equal(s.winner,'draw');assert.throws(()=>B.act(s,'enemy',0),/over/);
