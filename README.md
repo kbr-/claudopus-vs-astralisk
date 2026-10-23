@@ -20,12 +20,12 @@ Claudopus uses `assets/claudopus-battle.mp3` (track 1, 2:00); Astralisk uses `as
 
 ## Combat
 
-Each side has 180 HP. You move first; each attack report stays on screen until you press Continue (or focus the button and use Enter/Space). Then the rival responds. Both reports must be acknowledged before choosing the next move. An attack's power has a small random variation. Guards reduce the next damaging hit and then expire. Confidence increases damage by 18% per stage, up to three stages. Request Changes removes one confidence stage. Healing is capped at maximum HP. Every move has limited PP; Struggle becomes available if all PP is spent. Recoil can produce a double knockout.
+Claudopus has 181 HP; Astralisk has 180 HP. You move first, while the rival starts with a 52% opening shield that expires after its first damaging hit (misses do not consume it). It does not stack with other guards; the stronger protection applies. Each attack report stays on screen until you press Continue (or focus the button and use Enter/Space). Then the rival responds. Both reports must be acknowledged before choosing the next move. An attack's power has a small random variation. Guards reduce the next damaging hit and then expire. Confidence increases damage by 18% per stage, up to three stages. Request Changes removes one confidence stage. Healing is capped at maximum HP. Every move has limited PP; Struggle becomes available if all PP is spent. Recoil can produce a double knockout.
 
 - **Claudopus:** One Small Caveat (21 power + 25% guard), Request Changes (34 power + confidence reduction), Regression Suite (65% guard), Fresh Context (+44 HP).
-- **Astralisk:** Works on My Machine (32 power), This Fixes It! (+1 confidence, 50% chance of 30-power attack), One More Patch (39 power, 7 recoil), Restart the IDE (+44 HP).
+- **Astralisk:** Works on My Machine (32 power), This Fixes It! (+1 confidence, 50% chance of 30-power attack), One More Patch (40 power, 7 recoil), Restart the IDE (+44 HP).
 
-The CPU uses adversarial Monte Carlo tree search: it samples random damage and boost outcomes, plans replies for both sides, and scores simulated fights. It uses 192 simulations per decision. It never uses exhausted moves. The player still moves first, as in the original demo. Choose side during a battle to abandon it; no delayed enemy turn carries into the next fight.
+The CPU uses adversarial Monte Carlo tree search: it samples random damage and boost outcomes, plans replies for both sides, and scores simulated fights. It uses 192 simulations per decision. It never uses exhausted moves. The player moves first; the CPU receives the same opening protection used for second movers in self-play. Choose side during a battle to abandon it; no delayed enemy turn carries into the next fight.
 
 ## Files
 
@@ -35,6 +35,6 @@ Balance experiments, assumptions, and reproducible Monte Carlo commands are in [
 
 ## Check the rules
 
-With Node.js installed, run `node tests/engine.test.cjs` and `node tests/planner.test.cjs`. This covers shielding, failed confidence attacks, confidence reduction, capped healing, exhausted PP, recoil draws, post-knockout lockout, and 200 complete simulated battles. Node.js is only needed for this optional check, not for playing or hosting the game.
+With Node.js installed, run `node tests/engine.test.cjs` and `node tests/planner.test.cjs` and `node tests/opening-shield.test.cjs`. This covers shielding, failed confidence attacks, confidence reduction, capped healing, exhausted PP, recoil draws, post-knockout lockout, and 200 complete simulated battles. Node.js is only needed for this optional check, not for playing or hosting the game.
 
 Pages setup reference: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site

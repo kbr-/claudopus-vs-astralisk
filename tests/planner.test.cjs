@@ -3,4 +3,6 @@ let s=B.create('claudopus');s.enemy.hp=1;const saved=JSON.stringify(s);let i=P.c
 s=B.create('claudopus');assert(!P.legal(s,'player').includes(3),'Do not waste a turn healing full HP');s.player.guard=.65;assert(!P.legal(s,'player').includes(2),'Do not refresh an unchanged shield');s.player.pp.fill(0);assert.equal(P.choose(s,'player',random(4),192),-1);
 for(const side of ['claudopus','astralisk'])for(const who of ['player','enemy']){s=B.create(side);const first=P.choose(s,who,random(12),96);assert(P.legal(s,who).includes(first));assert.equal(first,P.choose(s,who,random(12),96),'Seeded decisions must reproduce');}
 s.over=true;assert.throws(()=>P.choose(s,'player'),/over/);
+let t=B.create('astralisk');t.enemy.guard=0;const counts=[0,0,0,0],rng=random(99);for(let n=0;n<500;n++)counts[P.rolloutMove(t,'player',rng)]++;assert(counts[0]>25&&counts[2]>25,'Near-tied attacks should both appear in rollouts');
+const old=B.dex.claudopus.moves[1].power;try{B.dex.claudopus.moves[1].power=25;t=B.create('claudopus');t.player.guard=.25;assert.equal(P.rolloutMove(t,'player',random(1),0),1,'An existing shield must not be valued as fresh protection');}finally{B.dex.claudopus.moves[1].power=old;}
 console.log('Planner passed: immediate KO, immutable real state, legal actions, healing/shield pruning, empty PP, deterministic seeds, terminal lockout.');

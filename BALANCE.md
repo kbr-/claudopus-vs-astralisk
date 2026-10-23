@@ -1,74 +1,79 @@
-# Balance methodology
+# Character balance and first-move advantage
 
-The battle is a stochastic, alternating-turn, zero-sum Markov game. A* has no
-single deterministic goal path here: an opponent chooses replies and damage is
-random. The shared planner uses Monte Carlo tree search (UCT) with sampled chance
-outcomes, adversarial selection, and tactical rollouts through the end of the
-fight. The deployed opponent uses 192 simulations per decision, eight explicit
-search plies, and up to 100 rollout plies. Both self-play sides use the same
-planner and budgets. Search operates on copies, never the real battle state.
+The current game keeps the player-first flow, but the second mover starts with a
+**52% opening shield**. It reduces the first successful damaging hit, then expires.
+A miss does not consume it. It does not stack with normal guards: the stronger
+protection applies. The intro and status panel show it explicitly.
 
-## Validated settings and results
+Claudopus has 181 HP and Astralisk has 180 HP. Works on My Machine has 32 power;
+One More Patch has 40 power and 7 recoil. Other move values are unchanged.
 
-Works on My Machine: 27 → 32 power. One More Patch: 35 → 39 power, with recoil
-6 → 7. Claudopus, healing, PP, confidence, guards, and HP are unchanged.
+## Fresh-seed validation
 
-| Policy / run | Games | Claudopus score | Astralisk score |
-| --- | ---: | ---: | ---: |
-| MCTS, 192 simulations, calibration | 6,000 | 49.75% | 50.25% |
-| MCTS, 384 simulations, deeper check | 1,200 | 48.63% | 51.37% |
-| MCTS, 192 simulations, frozen holdout | 6,000 | 50.65% | 49.35% |
-| Previous weighted CPU policy | 10,000 | 48.50% | 51.50% |
-| One-step tactical policy | 10,000 | 59.06% | 40.94% |
-| Uniform useful random moves | 10,000 | 38.94% | 61.06% |
+Both sides use the same adversarial Monte Carlo tree search. Opening positions
+are split equally; draws score one half to each side. “Initiative gap” means the
+first mover's score minus the second mover's score, in percentage points.
 
-The holdout contains 3,024 Claudopus wins, 2,946 Astralisk wins, and 30 draws.
-Claudopus’s approximate 95% sampling interval is 49.38–51.92%. This meets the
-49–51% point-estimate calibration target and is consistent with an even matchup;
-it does not establish exact equality. The doubled-budget check also includes
-50% in its sampling interval.
+| Run | Games | First mover | Second mover | Initiative gap | Claudopus | Astralisk |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Frozen production settings, 192 simulations | 6,000 | 53.81% | 46.19% | +7.62 pp | 50.24% | 49.76% |
+| Double-budget check, 384 simulations | 1,200 | 57.04% | 42.96% | +14.08 pp | 53.46% | 46.54% |
+| Otherwise-identical no-shield control, 192 simulations | 1,200 | 89.21% | 10.79% | +78.42 pp | 47.96% | 52.04% |
 
-Policies matter: the results are not 50–50 under random or one-step play. The
-calibration prioritizes the stronger adversarial planner, which is now used by
-the live opponent. In the holdout, Claudopus won 90.47% when moving first and
-Astralisk won 89.53% when moving first. Player-first initiative is intentionally
-retained; character balance is measured with both opening positions equally
-represented. Human-versus-CPU win rates are not claimed to be 50%.
+The final 6,000 games contain 2,992 Claudopus wins, 2,963 Astralisk wins, and
+45 draws. First movers won 3,206 games. Approximate 95% sampling intervals:
+Claudopus score 48.98–51.51%; initiative gap +5.09–10.14 pp. The deeper check's
+initiative interval is approximately +8.48–19.69 pp. These intervals describe
+Monte Carlo sampling uncertainty, not uncertainty over all possible strategies.
 
-## Benchmark contract
+The deployed opponent uses 192 simulations. Finite self-play supports a much
+smaller initiative edge and a near-even character matchup at that budget; it is
+not an optimal-play proof or a guarantee of equal human win rates. The deeper
+check illustrates the remaining strategy dependence. No outcome or difficulty is
+secretly forced according to the character selected.
 
-- Equal numbers of games with Claudopus and Astralisk moving first.
-- Independent seeded random streams for decisions and combat outcomes.
-- Draws score one half to each side; raw wins and draws are retained.
-- A 49–51% score is the calibration target, not a claim about every human strategy.
-- Check different rollout policies and double the search budget, then freeze the
-  parameters and run a new seed range for the final holdout.
-- The live game retains player-first initiative. This is a substantial player
-  advantage; an aggregate 50% character score does not imply a 50% human win rate.
-- JSON results include opening-position counts and approximate 95% sampling
-  intervals. Finite self-play is evidence about these policies, not an optimal-play
-  proof. No win probability is forced by hidden difficulty adjustments.
+The previous release's holdout, before opening protection, scored 90.25% for the
+first mover and 9.75% for the second (+80.5 pp). Its raw results remain in
+`balance-results/holdout.json`; its code is pinned by commit `ebc5e25`. The new
+otherwise-identical control separately isolates the opening shield's effect.
+
+## Search and tuning
+
+This is a stochastic, alternating-turn, zero-sum Markov game. A* has no single
+deterministic goal path: an opponent chooses replies and damage is random. MCTS
+uses UCT, samples chance outcomes, and selects adversarial replies. It expands up
+to eight explicit search plies and uses tactical rollouts of up to 100 more plies.
+Search uses copies of the real state. Rollout choices mix 12% uniform exploration
+with softmax sampling (temperature 4) among heuristic move values, avoiding a sharp
+all-or-nothing preference between near-tied attacks. The heuristic accounts for
+protection already present when valuing a guard.
+
+Tuning jointly checked initiative and character balance, including temporary
+shield strengths that overcorrected in favor of moving second. A 50% shield
+initially gave a +12.67 pp initiative gap at 192 simulations, but +22.75 pp in the
+doubled-budget test. The selected 52% setting reduced that sensitivity. After
+freezing it, the final holdout used a new seed range with no further adjustments.
+Raw screens, failed candidates, controls, and validation data remain under
+`balance-results/`. Files prefixed `opening-shield-` and early `initiative-0.*`
+use the previous greedy rollout policy; `smooth-*` and later initiative files use
+the revised rollout sampling. Older character-only calibration files describe the
+previous release, rather than the current opening-shield rules.
 
 ## Reproduce
 
-No dependencies beyond Node.js. From the repository root:
+Node.js only; no dependencies. All strategies execute the production engine, not
+a reimplementation. Independent seeded streams drive decisions and combat.
 
 ```sh
-node tools/balance.cjs '{"games":10000,"policies":["tactical","cpu","random"]}'
-node tools/balance-parallel.cjs '{"policy":"mcts","games":6000,"budget":192,"seed":900001,"output":"balance-results/holdout.json"}'
+node tests/engine.test.cjs
+node tests/planner.test.cjs
+node tests/opening-shield.test.cjs
+node tools/balance-parallel.cjs '{"policy":"mcts","games":6000,"budget":192,"seed":2200001}'
+node tools/balance-parallel.cjs '{"policy":"mcts","games":1200,"budget":384,"seed":2100001}'
+node tools/balance-parallel.cjs '{"policy":"mcts","games":1200,"budget":192,"seed":1900001,"tuning":{"openingShield":0}}'
 ```
 
-The parallel runner uses six workers by default and requires a game count divisible
-by twice the worker count. `cpu` is the old weighted-random policy retained as a
-benchmark; the live opponent uses `planner.js`. `tactical` uses deterministic
-one-step heuristics. `random` samples useful legal moves uniformly. All strategies
-execute the production engine, not a reimplementation of the fight.
-
-Original settings can be reproduced with `tuning` set to
-`{"machine":27,"patch":35,"recoil":6,"caveat":21,"review":34}`. The original
-2,000-game weighted-CPU run scored 72.95% for Claudopus; 2,000 tactical games scored
-93.65%. The original 200-game MCTS screen scored 96.75% (193 wins, 6 losses,
-1 draw). These explain the initial imbalance; the small MCTS baseline is not a
-high-precision estimate.
-
-Parameter experiments and final validation are retained under `balance-results/`.
+The parallel runner uses six workers and requires a game count divisible by twice
+the worker count. `cpu` in the benchmark is the original weighted policy;
+`tactical` is a one-step greedy policy and `random` samples useful moves uniformly.
+The live opponent uses `planner.js`.

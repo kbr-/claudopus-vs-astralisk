@@ -1,0 +1,33 @@
+{
+  "policy": "mcts",
+  "games": 600,
+  "budget": 192,
+  "tuning": {
+    "openingShield": 0.75
+  },
+  "seed": 1100001,
+  "claudopusWins": 391,
+  "astraliskWins": 205,
+  "draws": 4,
+  "firstMove": {
+    "claudopusFirst": {
+      "wins": 141,
+      "draws": 1,
+      "n": 300
+    },
+    "astraliskFirst": {
+      "wins": 47,
+      "draws": 3,
+      "n": 300
+    }
+  },
+  "meanPlies": 24.56,
+  "firstMoverScore": 0.31666666666666665,
+  "initiativeGapPp": -36.66666666666667,
+  "claudopusScore": 0.655,
+  "approx95": [
+    0.6169626157576523,
+    0.6930373842423477
+  ],
+  "seconds": 6.398
+}
